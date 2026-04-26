@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Add Company</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <h2>Add Company Data</h2>
+
+    <form action="/save" method="post">
+      <div class="form-group">
+        <label for="name">Company Name</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          placeholder="Enter company name"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="rd">R&D Spend</label>
+        <input
+          type="number"
+          id="rd"
+          name="rd"
+          placeholder="Enter R&D spending amount"
+          step="0.01"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="admin">Administration Spend</label>
+        <input
+          type="number"
+          id="admin"
+          name="admin"
+          placeholder="Enter administration spending amount"
+          step="0.01"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="marketing">Marketing Spend</label>
+        <input
+          type="number"
+          id="marketing"
+          name="marketing"
+          placeholder="Enter marketing spending amount"
+          step="0.01"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="profit">Profit</label>
+        <input
+          type="number"
+          id="profit"
+          name="profit"
+          placeholder="Enter profit amount"
+          step="0.01"
+          required
+        />
+      </div>
+
+      <button type="submit">Save & Generate Report</button>
+    </form>
+  </body>
+</html>

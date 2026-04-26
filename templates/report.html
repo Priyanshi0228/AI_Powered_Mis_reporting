@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>MIS Report</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="top-bar">
+        <div class="top-bar-title">AI Powered MIS Reporting</div>
+        <a href="/" class="btn btn-outline">Add Company Data</a>
+      </header>
+
+      <main class="container">
+        <section class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">MIS Report</div>
+              <div class="card-subtitle">
+                View the performance summary for all companies in the system.
+              </div>
+            </div>
+            <div class="card-actions">
+              <button class="btn-primary" onclick="loadData()">
+                Generate / Refresh Report
+              </button>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <div class="table-wrapper">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Company</th>
+                    <th>Revenue</th>
+                    <th>Expense</th>
+                    <th>Profit %</th>
+                    <th>Summary</th>
+                    <th>Score</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="rows"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      function loadData() {
+        fetch("/api/data")
+          .then((res) => res.json())
+          .then((data) => {
+            let r = "";
+            data.forEach((d) => {
+              r += `
+                <tr data-id="${d.id}">
+                  <td>${d.name}</td>
+                  <td>${d.revenue}</td>
+                  <td>${d.expense}</td>
+                  <td>${d.profit}</td>
+                  <td>${d.summary}</td>
+                  <td>${d.score}</td>
+                  <td>${d.status}</td>
+                  <td>
+                    <button class="btn btn-danger btn-sm" onclick="deleteRow(${d.id})">
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              `;
+            });
+            document.getElementById("rows").innerHTML = r;
+          })
+          .catch((err) => {
+            console.error("Error while loading data:", err);
+          });
+      }
+
+      function deleteRow(id) {
+        const confirmDelete = confirm(
+          "Are you sure you want to delete this record?",
+        );
+        if (!confirmDelete) {
+          return;
+        }
+
+        fetch(`/delete/${id}`, {
+          method: "POST",
+        })
+          .then((res) => res.json())
+          .then((result) => {
+            if (result && result.success) {
+              loadData();
+            } else {
+              alert("Could not delete the record. Please try again.");
+            }
+          })
+          .catch((err) => {
+            console.error("Error while deleting record:", err);
+            alert("Something went wrong while deleting the record.");
+          });
+      }
+
+      // Automatically load data when the page opens
+      // window.addEventListener("load", loadData);
+    </script>
+  </body>
+</html>
